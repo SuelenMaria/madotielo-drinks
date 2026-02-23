@@ -1,5 +1,17 @@
-import { useState } from "react"
-import { Menu } from "lucide-react"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Header from "./components/Header"
+import HeroStore from "./components/HeroStore"
+import Categorias from "./components/Categorias"
+
+
+import Novidades from "./pages/Novidades"
+import Bebidas from "./pages/Bebidas"
+import Eventos from "./pages/Eventos"
+import Personalizacao from "./pages/Personalizacao"
+import Outlet from "./pages/Outlet"
+
+import Footer from "./components/Footer"
+
 
 const drinks = [
   { nome: "Mojito", preco: "R$ 18", img: "https://images.unsplash.com/photo-1582571352039-38f70a03d3b9?q=80&w=800" },
@@ -9,66 +21,78 @@ const drinks = [
 ]
 
 export default function App() {
-  const [open, setOpen] = useState(false)
-
   return (
-    <div className="flex bg-black text-white min-h-screen">
+    <BrowserRouter>
+      <div className="bg-neutral-100 min-h-screen">
 
-      {/* MENU LATERAL */}
-      <aside className={`bg-neutral-900 p-6 space-y-6 fixed md:static h-full z-50 transition-all duration-300
-        ${open ? "left-0" : "-left-64"} md:left-0 w-64`}>
-        
-        <h1 className="text-2xl font-bold text-yellow-400">
-          Madotielo Drink's
-        </h1>
+        {/* HEADER */}
+        <Header />
 
-        <nav className="flex flex-col gap-4 text-lg">
-          <a href="#">Home</a>
-          <a href="#">Bebidas</a>
-          <a href="#">Garçons</a>
-          <a href="#">Reservas</a>
-        </nav>
-      </aside>
+        <Routes>
 
-      {/* CONTEÚDO */}
-      <div className="flex-1 md:ml-64">
+          {/* HOME */}
+          <Route path="/" element={
+            <>
+              <HeroStore />
+              <Categorias />
 
-        {/* TOPO MOBILE */}
-        <div className="md:hidden flex items-center p-4 border-b border-neutral-800">
-          <Menu onClick={() => setOpen(!open)} className="cursor-pointer" />
-          <span className="ml-4 font-bold">Madotielo Drink's</span>
-        </div>
+              {/* DRINKS */}
+              <section className="max-w-7xl mx-auto px-6 py-12">
+                <div className="mb-10">
+                  <div className="flex items-center gap-4">
+                    <h2 className="text-3xl font-semibold text-neutral-900">
+                      Drinks Disponíveis
+                    </h2>
+                    <div className="flex-1 h-[1px] bg-neutral-300"></div>
+                  </div>
 
-        {/* TÍTULO */}
-        <div className="p-8">
-          <h2 className="text-3xl font-bold mb-6">Drinks Disponíveis</h2>
-
-          {/* CARDS */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {drinks.map((drink, index) => (
-              <div
-                key={index}
-                className="bg-neutral-900 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition"
-              >
-                <img
-                  src={drink.img}
-                  alt={drink.nome}
-                  className="h-48 w-full object-cover"
-                />
-
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold">{drink.nome}</h3>
-                  <p className="text-yellow-400 font-bold">{drink.preco}</p>
-
-                  <button className="mt-4 w-full bg-yellow-400 text-black py-2 rounded-lg font-semibold hover:opacity-90">
-                    Adicionar
-                  </button>
+                  <p className="text-neutral-500 mt-2">
+                    Escolha seu drink favorito
+                  </p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {drinks.map((drink, index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition"
+                    >
+                      <img
+                        src={drink.img}
+                        alt={drink.nome}
+                        className="h-48 w-full object-cover"
+                      />
+
+                      <div className="p-5">
+                        <h3 className="text-xl font-semibold text-gray-900">
+                          {drink.nome}
+                        </h3>
+                        <p className="text-yellow-500 font-bold">{drink.preco}</p>
+
+                        <button className="mt-4 w-full bg-yellow-500 text-black py-2 rounded-lg font-semibold hover:bg-yellow-600">
+                          Adicionar
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </>
+          } />
+
+          {/* OUTRAS PÁGINAS */}
+          <Route path="/novidades" element={<Novidades />} />
+          <Route path="/bebidas" element={<Bebidas />} />
+          <Route path="/eventos" element={<Eventos />} />
+          <Route path="/personalizacao" element={<Personalizacao />} />
+          <Route path="/outlet" element={<Outlet />} />
+
+        </Routes>
+
+        {/* FOOTER */}
+        <Footer />
+
       </div>
-    </div>
+    </BrowserRouter>
   )
 }
